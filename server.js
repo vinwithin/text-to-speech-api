@@ -1,5 +1,5 @@
 const Hapi = require('@hapi/hapi');
-const quickStart = require('./handler');
+const quickStart = require('./src/handler');
 
 const init = async () => {
 
