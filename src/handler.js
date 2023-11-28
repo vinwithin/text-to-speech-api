@@ -21,7 +21,7 @@ const quickStart = async(request, h) => {
     // Write the binary audio content to a local file
     const writeFile = util.promisify(fs.writeFile);
     // const id = nanoid(16);
-    const success = await writeFile("output.mp3", output.audioContent, 'binary');
+    await writeFile("uploads/output.mp3", output.audioContent, 'binary');
     if(writeFile){
       const respone = h.response({
         status : 'success',
