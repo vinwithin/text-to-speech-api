@@ -11,14 +11,23 @@ const init = async () => {
         {
             method: "GET",
             path: '/',
-            handler: (request, h) => {
-                return 'hello world'
+            handler: (request, h, reply) => {
+                return Data = {
+                    message: 'Hello World!'
+                }
             }
         },
         {
             method: "POST",
             path: '/text-to-speech',
             handler: quickStart
+        },
+        {
+            method: "GET",
+            path: '/text-to-speech',
+            handler:async (request, h) => {
+                return "hello"
+            }
         }
     ])
     await server.start();
