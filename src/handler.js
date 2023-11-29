@@ -42,16 +42,15 @@ const quickStart = async(request, h) => {
     }catch(error){
       console.log('Error', error)
     }
-    if(ret){
-      const respone = h.response({
-        status : 'success',
-        message: 'berhasil menambahkan suara',
-        
-      }).code(201);
-      return respone;
+    if(writeFile){
+      return h.response({
+        status: 'success',
+        data: {
+          message: "berhasil menambahkan suara"
+        },
+      }).code(200);
+    
     }
-    
-    
   }
 //  const uploadFile = async() => {
 //     try{
