@@ -18,7 +18,7 @@ const init = async () => {
         {
             method: "POST",
             path: '/text-to-speech',
-            handler: quickStart,
+            handler: quickStart
         }
     ])
     await server.start();
