@@ -4,14 +4,15 @@ require('dotenv').config();
 const fs = require('fs');
 const util = require('util');
 const client  = new TextToSpeech.TextToSpeechClient();
-//nama dan key untuk mengakses cloud storage bucket
+//name and key to access google cloud storage
 const projectID = process.env.PROJECT_ID
 const keyFileName = process.env.KEYFILENAME
 const storage = new Storage({projectID, keyFileName});
 const Bucket_name = process.env.BUCKET_NAME;
-//nama output file di lokal
+//output name in my local folder
 const date = Date.now();
 const file_name = date + ".mp3" 
+const voices = require('./voice')
 
 const quickStart = async(request, h) => {
     // The text to synthesize
@@ -33,36 +34,34 @@ const quickStart = async(request, h) => {
     const writeFile = util.promisify(fs.writeFile);
     // const id = nanoid(16);
     await writeFile(`uploads/${file_name}`, output.audioContent, 'binary');
+    //push file_name to voices
+    voices.push(file_name)
     //upload file to storage bucket
     try{
       const bucket = storage.bucket(Bucket_name)
       await bucket.upload(`uploads/${file_name}`, {
         destination: file_name
       })
+      //set object in gcs to public
+      await storage.bucket(Bucket_name).file(file_name).makePublic();
+      console.log(`gs://${Bucket_name}/${file_name} is now public.`);
     }catch(error){
       console.log('Error', error)
     }
-    if(writeFile){
-      return h.response({
-        status: 'success',
-        data: {
-          message: "berhasil menambahkan suara"
-        },
-      }).code(200);
+    // if(writeFile){
+    //   return h.response({
+    //     status: 'success',
+    //     data: {
+    //       message: "berhasil menambahkan suara"
+    //     },
+    //   }).code(200);
     
-    }
+    // }
+    
+      
+    
   }
-//  const uploadFile = async() => {
-//     try{
-//       const bucket = storage.bucket(process.env.BUCKET_NAME)
-//       const ret = await bucket.upload(`uploads/${file_name}`, {
-//         destination: file_name
-//       })
-//       return ret
-//     }catch(error){
-//       console.log('Error', error)
-//     }
-//   }
+
  
   
   
