@@ -45,11 +45,8 @@ const quickStart = async(request, h) => {
       //set object in gcs to public
       await storage.bucket(Bucket_name).file(file_name).makePublic();
       // console.log(`gs://${Bucket_name}/${file_name} is now public.`);
-      const [metadata] = await storage
-      .bucket(Bucket_name)
-      .file(file_name)
-      .getMetadata();
-      console.log(`MediaLink: ${metadata.mediaLink}`);
+      getMetadata();
+      
       }catch(error){
       console.log('Error', error)
     }
@@ -65,9 +62,13 @@ const quickStart = async(request, h) => {
     //   }).code(200);
     
     // }
-    
-      
-    
+  }
+  const getMetadata = async() => {
+    const [metadata] = await storage
+      .bucket(Bucket_name)
+      .file(file_name)
+      .getMetadata();
+      console.log(`MediaLink: ${metadata.mediaLink}`);
   }
 
  

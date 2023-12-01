@@ -11,7 +11,7 @@ const init = async () => {
         {
             method: "GET",
             path: '/',
-            handler: (request, h, reply) => {
+            handler: (request, h) => {
                 return Data = {
                     message: 'Hello World!'
                 }
