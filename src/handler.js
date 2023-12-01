@@ -16,7 +16,7 @@ const voices = require('./voice')
 
 const quickStart = async(request, h) => {
     // The text to synthesize
-    const { text } = request.payload;
+    const { text } = request.payload || request.query.text;
   
     // Construct the request
     const process = {
@@ -44,10 +44,18 @@ const quickStart = async(request, h) => {
       })
       //set object in gcs to public
       await storage.bucket(Bucket_name).file(file_name).makePublic();
-      console.log(`gs://${Bucket_name}/${file_name} is now public.`);
-    }catch(error){
+      // console.log(`gs://${Bucket_name}/${file_name} is now public.`);
+      const [metadata] = await storage
+      .bucket(Bucket_name)
+      .file(file_name)
+      .getMetadata();
+      console.log(`MediaLink: ${metadata.mediaLink}`);
+      }catch(error){
       console.log('Error', error)
     }
+    
+  // Gets the metadata for the file
+  
     // if(writeFile){
     //   return h.response({
     //     status: 'success',
