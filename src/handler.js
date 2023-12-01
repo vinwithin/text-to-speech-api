@@ -12,11 +12,11 @@ const Bucket_name = process.env.BUCKET_NAME;
 //output name in my local folder
 const date = Date.now();
 const file_name = date + ".mp3" 
-const voices = require('./voice')
+
 
 const quickStart = async(request, h) => {
     // The text to synthesize
-    const { text } = request.payload || request.query.text;
+    const text  = request.body;
   
     // Construct the request
     const process = {
@@ -35,7 +35,6 @@ const quickStart = async(request, h) => {
     // const id = nanoid(16);
     await writeFile(`uploads/${file_name}`, output.audioContent, 'binary');
     //push file_name to voices
-    voices.push(file_name)
     //upload file to storage bucket
     try{
       const bucket = storage.bucket(Bucket_name)
@@ -44,8 +43,10 @@ const quickStart = async(request, h) => {
       })
       //set object in gcs to public
       await storage.bucket(Bucket_name).file(file_name).makePublic();
-      // console.log(`gs://${Bucket_name}/${file_name} is now public.`);
-      getMetadata();
+      
+      return h.respone({link: `https://storage.googleapis.com/${Bucket_name}/${file_name}`});
+      
+      
       
       }catch(error){
       console.log('Error', error)
@@ -63,17 +64,12 @@ const quickStart = async(request, h) => {
     
     // }
   }
-  const getMetadata = async(request, h) => {
-    const [metadata] = await storage
-      .bucket(Bucket_name)
-      .file(file_name)
-      .getMetadata();
-      // console.log(`MediaLink: ${metadata.mediaLink}`);
-      const response = h.response(metadata.mediaLink)
-      .header('cache-control', 'no-cache')
-      .type('application/json')
-        return response;
-  }
+  // async function getMetadata(){
+  //   const [metadata] = await storage
+  //     .bucket(Bucket_name)
+  //     .file(file_name);
+  //     return `Name: ${metadata.name}`;
+  // }
 
  
   

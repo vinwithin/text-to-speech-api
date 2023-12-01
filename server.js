@@ -22,13 +22,7 @@ const init = async () => {
             path: '/text-to-speech',
             handler: quickStart
         },
-        {
-            method: "GET",
-            path: '/text-to-speech',
-            handler:async (request, h) => {
-                return "hello"
-            }
-        }
+        
     ])
     await server.start();
     console.log('Server running on %s', server.info.uri);
