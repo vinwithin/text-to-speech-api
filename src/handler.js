@@ -63,12 +63,16 @@ const quickStart = async(request, h) => {
     
     // }
   }
-  const getMetadata = async() => {
+  const getMetadata = async(request, h) => {
     const [metadata] = await storage
       .bucket(Bucket_name)
       .file(file_name)
       .getMetadata();
-      console.log(`MediaLink: ${metadata.mediaLink}`);
+      // console.log(`MediaLink: ${metadata.mediaLink}`);
+      const response = h.response(metadata.mediaLink)
+      .header('cache-control', 'no-cache')
+      .type('application/json')
+        return response;
   }
 
  
