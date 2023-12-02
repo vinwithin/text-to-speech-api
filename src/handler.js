@@ -16,7 +16,7 @@ const file_name = date + ".mp3"
 
 const quickStart = async(request, h) => {
     // The text to synthesize
-    const text  = request.body;
+    const { text }  = request.payload;
   
     // Construct the request
     const process = {
@@ -41,37 +41,23 @@ const quickStart = async(request, h) => {
       await bucket.upload(`uploads/${file_name}`, {
         destination: file_name
       })
+      fs.rmSync(`uploads/${file_name}`, {
+        force: true,
+    });
       //set object in gcs to public
       await storage.bucket(Bucket_name).file(file_name).makePublic();
-      
-      return h.respone({link: `https://storage.googleapis.com/${Bucket_name}/${file_name}`});
-      
-      
-      
+      // return `https://storage.googleapis.com/${Bucket_name}/${file_name}`
+
       }catch(error){
       console.log('Error', error)
     }
-    
-  // Gets the metadata for the file
+    const responseData = {
+      url: `https://storage.googleapis.com/${Bucket_name}/${file_name}`
+    }
+    return h.response(responseData).header('Content-Type', 'application/json').code(200);
+   
   
-    // if(writeFile){
-    //   return h.response({
-    //     status: 'success',
-    //     data: {
-    //       message: "berhasil menambahkan suara"
-    //     },
-    //   }).code(200);
-    
-    // }
   }
-  // async function getMetadata(){
-  //   const [metadata] = await storage
-  //     .bucket(Bucket_name)
-  //     .file(file_name);
-  //     return `Name: ${metadata.name}`;
-  // }
-
- 
   
   
  module.exports = quickStart;
