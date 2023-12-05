@@ -41,6 +41,7 @@ const quickStart = async(request, h) => {
       await bucket.upload(`uploads/${file_name}`, {
         destination: file_name
       })
+      //remove file mp3 from local
       fs.rmSync(`uploads/${file_name}`, {
         force: true,
     });
@@ -52,6 +53,7 @@ const quickStart = async(request, h) => {
       console.log('Error', error)
     }
     const responseData = {
+      status : "success",
       url: `https://storage.googleapis.com/${Bucket_name}/${file_name}`
     }
     return h.response(responseData).header('Content-Type', 'application/json').code(200);
