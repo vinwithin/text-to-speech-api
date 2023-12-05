@@ -54,9 +54,17 @@ const quickStart = async(request, h) => {
     }
     const responseData = {
       status : "success",
+      message : "berhasil menambahkan suara",
       url: `https://storage.googleapis.com/${Bucket_name}/${file_name}`
     }
-    return h.response(responseData).header('Content-Type', 'application/json').code(200);
+    if(writeFile){
+      return h.response(responseData).header('Content-Type', 'application/json').code(200);
+    }else{
+      return h.response({
+        status : "fail",
+        message : "gagal mengubah suara",
+      }).code(404);
+    }
    
   
   }
